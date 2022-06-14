@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.2.2'
+    testImplementation group: 'org.testng', name: 'testng', version: '7.1.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+    implementation group: 'org.apache.maven.plugins', name: 'maven-surefire-plugin', version: '3.0.0-M7'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.1'
+    implementation("org.uncommons:reportng:1.1.4") {
+        exclude group: "org.testng", module: "testng"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+task smoke(type: Test) {
+    systemProperties(System.getProperties())
+    useTestNG() {
+        suites './src/test/resources/GradleSmoke.xml'
+    }
+}
+task regression(type: Test) {
+    systemProperties(System.getProperties())
+    useTestNG() {
+        suites './src/test/resources/GradleRegression.xml'
+    }
+}
+test {
+    systemProperties(System.getProperties())
+    useTestNG() {
+        suites './src/test/resources/GradleSmoke.xml'
+        options.useDefaultListeners true
+        reports.html.enabled = true
+        reports.junitXml.enabled = true
+        reports.junitXml.destination = file("$buildDir/reports/tests/test/junitreports")
+        reports.html.destination = file("$buildDir/reports/tests/test")
+    }
+}
