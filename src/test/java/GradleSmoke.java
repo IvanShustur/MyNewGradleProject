@@ -56,6 +56,6 @@ public class GradleSmoke extends BaseTest {
         webDriver.get("https://google.com/ncr");
         webDriver.findElement(By.name("q")).sendKeys(("potato" + Keys.ENTER));
         Assert.assertTrue(webDriver.getCurrentUrl().contains("grape"));
-        webDriver.quit();
+        webDriver.close();
     }
 }
