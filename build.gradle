@@ -32,17 +32,18 @@ task smoke(type: Test) {
         suites './src/test/resources/GradleSmoke.xml'
     }
 }
-task regression(type: Test) {
-    systemProperties(System.getProperties())
-    useTestNG() {
-        suites './src/test/resources/GradleRegression.xml'
-    }
-}
+//task regression(type: Test) {
+//    systemProperties(System.getProperties())
+//    useTestNG() {
+//        suites './src/test/resources/GradleRegression.xml'
+//    }
+//}
 test {
     systemProperties(System.getProperties())
     useTestNG() {
         suites './src/test/resources/GradleSmoke.xml'
-        options.useDefaultListeners true
+        useDefaultListeners = true
+        outputDirectory = file ("$projectDir/testngReport")
         reports.html.enabled = true
         reports.junitXml.enabled = true
         reports.junitXml.destination = file("$buildDir/reports/tests/test/junitreports")
